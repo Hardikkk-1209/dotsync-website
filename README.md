@@ -30,3 +30,30 @@ The React + TypeScript frontend and FastAPI backend currently run in mock mode. 
 5. Open the local URL printed by Vite. The frontend proxies `/api` requests to the local backend.
 
 The first development environment needs Node.js 20.19+ or 22.12+ and Python 3.11+. If PowerShell blocks `npm.ps1`, use `npm.cmd install` and `npm.cmd run dev`. Mock mode is shown in the page so simulation cannot be mistaken for physical board movement.
+
+
+## Learning Studio features
+
+The Learning Studio is available from the **Learning studio** navigation item. It includes:
+- Interactive six-dot Braille exploration and dot-identification quiz.
+- Letter-by-letter word practice for short A-Z words.
+- Browser speech synthesis for spoken prompts and letter/dot descriptions; optional browser speech recognition when supported.
+- Local progress, accuracy, practice-day streaks, and achievement badges stored in this browser only.
+- High-contrast, larger-text, and reduced-motion preferences, plus screen-reader status announcements.
+- A mock-device fallback and an optional ESP32 adapter behind the local FastAPI service.
+
+### Run in simulator mode
+
+The default remains safe simulator mode. Start the backend and frontend using the local setup commands above; no physical ESP32 commands are sent in this mode.
+
+### Enable the ESP32 adapter
+
+Only do this on a trusted local network, and confirm the firmware endpoints/fields before connecting a learner. In the terminal where you start FastAPI, set the actual device URL:
+
+```bash
+export DOTSYNC_DEVICE_MODE=esp32
+export DOTSYNC_DEVICE_URL=http://192.168.4.1
+python -m uvicorn app.main:app --app-dir backend --reload --host 127.0.0.1 --port 8000
+```
+
+Replace `192.168.4.1` with the ESP32's actual local address. The adapter uses `GET /api/status`, form-encoded `POST /api/learn` with a `letter` field, and `POST /api/pins/reset`. These fields must be checked against the exact firmware revision on your board. The adapter has not been physically bench-validated as part of this website change. Keep the backend bound to localhost and do not port-forward the ESP32.

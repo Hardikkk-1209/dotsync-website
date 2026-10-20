@@ -1,9 +1,10 @@
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { api, DeviceStatus, HealthResponse, PracticeResponse, WordSession } from "./api";
 import BrailleParticleScene from "./BrailleParticleScene";
+import LearningStudio from "./LearningStudio";
 
 const MAX_TEXT_LENGTH = 40;
-type Page = "home" | "learn" | "guided" | "practice" | "quiz" | "about";
+type Page = "home" | "learn" | "guided" | "practice" | "quiz" | "about" | "studio";
 
 const pages: { id: Page; label: string }[] = [
   { id: "home", label: "Home" },
@@ -12,6 +13,7 @@ const pages: { id: Page; label: string }[] = [
   { id: "practice", label: "Practice" },
   { id: "quiz", label: "Word journey" },
   { id: "about", label: "Our approach" },
+  { id: "studio", label: "Learning studio" },
 ];
 
 const alphabet = [
@@ -158,9 +160,9 @@ function App() {
             </a>
           ))}
         </nav>
-        <div className="header-status" aria-label="Development preview status">
+        <div className="header-status" role="status" aria-live="polite" aria-label="Device connection status">
           <span className="status-dot" aria-hidden="true" />
-          <span>Preview · simulated board</span>
+          <span>{device?.mode === "esp32" ? (device.connected ? "ESP32 connected" : "ESP32 offline") : "Preview · simulated board"}</span>
         </div>
       </header>
 
@@ -187,6 +189,7 @@ function App() {
         )}
         {page === "quiz" && <WordJourneyPage />}
         {page === "about" && <ApproachPage />}
+        {page === "studio" && <LearningStudio />}
       </main>
 
       <footer className="site-footer">

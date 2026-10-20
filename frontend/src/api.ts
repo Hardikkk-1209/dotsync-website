@@ -4,7 +4,7 @@ export type HealthResponse = {
 };
 
 export type DeviceStatus = {
-  mode: "mock";
+  mode: "mock" | "esp32";
   connected: boolean;
   busy: boolean;
   message: string;

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class DeviceStatus(BaseModel):
-    mode: Literal["mock"]
+    mode: Literal["mock", "esp32"]
     connected: bool
     busy: bool
     message: str
